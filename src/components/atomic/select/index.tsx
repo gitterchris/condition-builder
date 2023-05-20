@@ -7,7 +7,7 @@ interface MenuItem {
   value: string;
 }
 
-export interface Props {
+interface Props {
   initialValue?: string;
   label: string;
   menuItems: Array<MenuItem>;
