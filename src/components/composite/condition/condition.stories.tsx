@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import styled from "@emotion/styled";
 import Condition from ".";
-import type { Operators } from ".";
+import { Operators } from "@/utils/queries";
+import { QueryContextProvider } from "@/components/hooks/query/use-query";
 
 const Wrapper = styled.div({
   margin: "26px",
@@ -16,9 +17,11 @@ const meta: Meta<typeof Condition> = {
   */
   decorators: [
     (Story: any) => (
-      <Wrapper>
-        <Story />
-      </Wrapper>
+      <QueryContextProvider>
+        <Wrapper>
+          <Story />
+        </Wrapper>
+      </QueryContextProvider>
     ),
   ],
 };
