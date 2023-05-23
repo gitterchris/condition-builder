@@ -42,7 +42,7 @@ interface QueryContextType {
     }
   }
 */
-type ORConditionsType = Record<string, QueryType>;
+export type ORConditionsType = Record<string, QueryType>;
 export type ANDConditionsType = Record<string, ORConditionsType>;
 
 const QueryContext = createContext<QueryContextType>({
