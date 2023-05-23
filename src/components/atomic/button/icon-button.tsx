@@ -6,6 +6,8 @@ import { MouseEventHandler } from "react";
 interface Props {
   type: "delete" | "add";
   onClick: MouseEventHandler<HTMLButtonElement>;
+  onMouseOver?: MouseEventHandler<HTMLButtonElement>;
+  onMouseOut?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const SupportedIcons = {
@@ -21,10 +23,15 @@ const SupportedIcons = {
   },
 };
 
-const Icon = ({ type, onClick }: Props) => {
+const Icon = ({ type, onClick, onMouseOver, onMouseOut }: Props) => {
   const { Component, ariaLabel, color } = SupportedIcons[type];
   return (
-    <IconButton aria-label={ariaLabel} onClick={onClick}>
+    <IconButton
+      aria-label={ariaLabel}
+      onClick={onClick}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    >
       <Component sx={{ color }} />
     </IconButton>
   );

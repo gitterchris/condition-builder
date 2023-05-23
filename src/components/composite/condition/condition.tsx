@@ -11,6 +11,7 @@ import useQuery from "@/components/hooks/query/use-query";
 import useData from "@/components/hooks/data/use-data";
 import type { Operators } from "@/utils/queries";
 import { operators } from "@/utils/queries";
+import RectangularPlaceholder from "@/components/atomic/placeholder";
 
 interface Props {
   keyAnd: string;
@@ -45,19 +46,13 @@ const Or = styled(Text)({
 
 const noop = () => {};
 
-// TODO:
-// Replace noop with event handlers
-// Update styling as needed
 const Condition = ({ keyAnd, showOr = false }: Props) => {
   const { leftConditions } = useData();
   const [leftCondition, setLeftCondition] = useState<string>();
   const [operator, setOperator] = useState<Operators>();
   const [value, setValue] = useState<string>();
+  const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
   const keyOr = useRef(`or_${uuidv4()}`);
-
-  // TODO: leftConditions should be the same everytime.
-  // So we can create a new context that retrieves this data from the API.
-  // Then we can remove these two as a prop for this component.
 
   const {
     ops: { upsertQuery },
@@ -71,30 +66,38 @@ const Condition = ({ keyAnd, showOr = false }: Props) => {
   }, []);
 
   return (
-    <Container>
-      <ConditionsSection>
-        {showOr && <Or variant="body1" text="OR" />}
-        <Select
-          label="Left Condition"
-          menuItems={leftConditions}
-          onSelection={(selectedCondition) =>
-            setLeftCondition(selectedCondition)
-          }
-        />
-        <Select
-          label="Operator"
-          menuItems={operators}
-          onSelection={(selectedOperator) =>
-            setOperator(selectedOperator as Operators)
-          }
-        />
-        <TextField label="Value" onChange={(e) => setValue(e.target.value)} />
-      </ConditionsSection>
-      <Ctas>
-        <Button.Icon type="add" onClick={noop} />
-        <Button.Icon type="delete" onClick={noop} />
-      </Ctas>
-    </Container>
+    <>
+      <Container>
+        <ConditionsSection>
+          {showOr && <Or variant="body1" text="OR" />}
+          <Select
+            label="Left Condition"
+            menuItems={leftConditions}
+            onSelection={(selectedCondition) =>
+              setLeftCondition(selectedCondition)
+            }
+          />
+          <Select
+            label="Operator"
+            menuItems={operators}
+            onSelection={(selectedOperator) =>
+              setOperator(selectedOperator as Operators)
+            }
+          />
+          <TextField label="Value" onChange={(e) => setValue(e.target.value)} />
+        </ConditionsSection>
+        <Ctas>
+          <Button.Icon
+            type="add"
+            onClick={noop}
+            onMouseOver={() => setShowPlaceholder(true)}
+            onMouseOut={() => setShowPlaceholder(false)}
+          />
+          <Button.Icon type="delete" onClick={noop} />
+        </Ctas>
+      </Container>
+      {showPlaceholder && <RectangularPlaceholder />}
+    </>
   );
 };
 

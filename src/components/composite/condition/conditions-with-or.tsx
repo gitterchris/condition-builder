@@ -1,5 +1,5 @@
 import type { ORConditionsType } from "@/components/hooks/query/use-query";
-import Condition from ".";
+import Condition from "./condition";
 import styled from "@emotion/styled";
 
 interface Props {

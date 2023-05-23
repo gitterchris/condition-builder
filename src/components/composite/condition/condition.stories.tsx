@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import styled from "@emotion/styled";
-import Condition from ".";
-import { Operators } from "@/utils/queries";
+import Condition from "./condition";
 import { QueryContextProvider } from "@/components/hooks/query/use-query";
 import { DataContextProvider } from "@/components/hooks/data/use-data";
 
