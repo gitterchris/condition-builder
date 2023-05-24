@@ -34,13 +34,18 @@ type Story = StoryObj<typeof Condition>;
 
 export const Default: Story = {
   args: {
-    keyAnd: "and_1",
+    condition: [
+      "and_1",
+      "or_1",
+      { condition: "name", operator: "Contain", value: "Alm" },
+    ],
+    index: 0,
   },
 };
 
 export const WithORInFront: Story = {
   args: {
     ...Default.args,
-    showOr: true,
+    index: 1,
   },
 };

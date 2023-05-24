@@ -1,10 +1,13 @@
+import { v4 as uuidv4 } from "uuid";
+
 export type Operators =
   | "Equals"
   | "Greater than"
   | "Less than"
   | "Contain"
   | "Not Contain"
-  | "Regex";
+  | "Regex"
+  | "";
 
 export interface OperatorType {
   text: Operators;
@@ -28,3 +31,7 @@ export interface LeftConditionType {
   text: string;
   value: string;
 }
+
+export const generateId = (type: "or" | "and") => {
+  return `${type}_${uuidv4()}`;
+};

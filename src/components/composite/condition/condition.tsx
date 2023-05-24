@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Select from "@/components/atomic/select";
 import TextField from "@/components/atomic/input";
 import * as Button from "@/components/atomic/button";
 import Text from "@/components/atomic/text";
-import useQuery from "@/components/hooks/query/use-query";
+import useQuery, { QueriesTriple } from "@/components/hooks/query/use-query";
 import useData from "@/components/hooks/data/use-data";
 import type { Operators } from "@/utils/queries";
-import { operators } from "@/utils/queries";
+import { operators, generateId } from "@/utils/queries";
 import RectangularPlaceholder from "@/components/atomic/placeholder";
 
 interface Props {
-  keyAnd: string;
-  showOr?: boolean;
+  condition: QueriesTriple;
+  index: number;
 }
 
 const Container = styled.div({
@@ -46,24 +45,28 @@ const Or = styled(Text)({
 
 const noop = () => {};
 
-const Condition = ({ keyAnd, showOr = false }: Props) => {
+const Condition = ({ condition, index }: Props) => {
   const { leftConditions } = useData();
   const [leftCondition, setLeftCondition] = useState<string>();
   const [operator, setOperator] = useState<Operators>();
   const [value, setValue] = useState<string>();
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
-  const keyOr = useRef(`or_${uuidv4()}`);
+  const showOr = index !== 0;
 
   const {
-    ops: { upsertQuery },
+    ops: { add, update },
   } = useQuery();
 
   useEffect(() => {
     const isCompleteCondition = leftCondition && operator && value;
     if (isCompleteCondition) {
-      upsertQuery(keyAnd, keyOr, { condition: leftCondition, operator, value });
+      update([
+        condition[0],
+        condition[1],
+        { condition: leftCondition, operator, value },
+      ]);
     }
-  }, []);
+  }, [condition, leftCondition, operator, update, value]);
 
   return (
     <>
@@ -89,7 +92,16 @@ const Condition = ({ keyAnd, showOr = false }: Props) => {
         <Ctas>
           <Button.Icon
             type="add"
-            onClick={noop}
+            onClick={() => {
+              add(
+                [
+                  condition[0],
+                  generateId("or"),
+                  { condition: "", operator: "", value: "" },
+                ],
+                index + 1
+              );
+            }}
             onMouseOver={() => setShowPlaceholder(true)}
             onMouseOut={() => setShowPlaceholder(false)}
           />

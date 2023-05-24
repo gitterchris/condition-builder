@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import styled from "@emotion/styled";
-import ConditionsWithOr from "./conditions-with-or";
+import ConditionsWithAnd from "./conditions-with-and";
 import { QueryContextProvider } from "@/components/hooks/query/use-query";
 import { DataContextProvider } from "@/components/hooks/data/use-data";
 
@@ -8,9 +8,9 @@ const Wrapper = styled.div({
   margin: "26px",
 });
 
-const meta: Meta<typeof ConditionsWithOr> = {
+const meta: Meta<typeof ConditionsWithAnd> = {
   title: "Composite/Condition",
-  component: ConditionsWithOr,
+  component: ConditionsWithAnd,
   /*
     For some reason, I am getting TS errors when adding this as a Global decorator.
     Adding it here everytime for now.
@@ -30,21 +30,8 @@ const meta: Meta<typeof ConditionsWithOr> = {
 
 export default meta;
 
-type Story = StoryObj<typeof ConditionsWithOr>;
+type Story = StoryObj<typeof ConditionsWithAnd>;
 
-export const ConditionListWithOr: Story = {
-  args: {
-    orConditions: [
-      [
-        "and_1",
-        "or_1",
-        { condition: "name", operator: "Contain", value: "Alm" },
-      ],
-      [
-        "and_1",
-        "or_2",
-        { condition: "name", operator: "Contain", value: "Iron" },
-      ],
-    ],
-  },
+export const ConditionListWithAnd: Story = {
+  args: {},
 };

@@ -1,6 +1,11 @@
 import type { Operators } from "@/utils/queries";
-import { useState, createContext, ReactNode, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
+import {
+  useState,
+  createContext,
+  ReactNode,
+  useContext,
+  useCallback,
+} from "react";
 
 interface Props {
   children: ReactNode;
@@ -13,81 +18,67 @@ export interface QueryType {
 }
 
 interface QueryContextOpsType {
-  upsertQuery: Function;
+  add: (newQuery: QueriesTriple, insertionIndex: number) => void;
+  update: (updatedQuery: QueriesTriple) => void;
 }
 
 interface QueryContextType {
-  queries: ANDConditionsType;
+  queries: QueriesType;
   ops: QueryContextOpsType;
 }
 
 /*
   Sample:
-  {
-    and_1: {
-      or_1: {
-        condition: "name", operator: "Contain", value: "Alm"
-      },
-      or_2: {
-        condition: "name", operator: "Contain", value: "Iron"
-      }
-    },
-    and_2: {
-      or_1: {
-        condition: "name", operator: "Contain", value: "Alm"
-      },
-      or_2: {
-        condition: "name", operator: "Contain", value: "Iron"
-      }
-    }
-  }
+  [
+    [ "and_1", "or_1", { condition: "name", operator: "Contain", value: "Alm" } ],
+    [ "and_1", "or_2", { condition: "name", operator: "Contain", value: "Iron" } ],
+    [ "and_2", "or_1", { condition: "name", operator: "Contain", value: "Alm" } ],
+    [ "and_2", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
+  ]
 */
-export type ORConditionsType = Record<string, QueryType>;
-export type ANDConditionsType = Record<string, ORConditionsType>;
+export type QueriesTriple = [string, string, QueryType];
+export type QueriesType = Array<[string, string, QueryType]>;
+
+const mockQueries: QueriesType = [
+  ["and_1", "or_1", { condition: "name", operator: "Contain", value: "Alm" }],
+  ["and_1", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
+  ["and_2", "or_1", { condition: "name", operator: "Contain", value: "Alm" }],
+  ["and_2", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
+];
+
+const noop = () => {};
 
 const QueryContext = createContext<QueryContextType>({
-  queries: {},
-  ops: { upsertQuery: () => {} },
+  queries: [],
+  ops: { add: noop, update: noop },
 });
 
-export const update = (query: QueryType, oldQuery: QueryType) => {
-  oldQuery.condition = query.condition;
-  oldQuery.operator = query.operator;
-  oldQuery.value = query.value;
-};
-
-export const add = (
-  query: QueryType,
-  queries: ANDConditionsType,
-  keyAnd: string
-) => {
-  const hasAndLevelEntry = !!queries[keyAnd];
-  if (!hasAndLevelEntry) {
-    queries[keyAnd] = { [`or_${uuidv4()}`]: query };
-    return;
-  }
-
-  queries[keyAnd] = {
-    ...queries[keyAnd],
-    [`or_${uuidv4()}`]: query,
-  };
-};
-
 export const QueryContextProvider = ({ children }: Props) => {
-  const [queries, setQueries] = useState<ANDConditionsType>({});
+  const [queries, setQueries] = useState<QueriesType>([...mockQueries]);
 
-  // TODO: We can put these in useCallback.
-  const upsertQuery = (keyAnd: string, keyOr: string, query: QueryType) => {
-    const isExisting = !!(queries[keyAnd] && queries[keyAnd][keyOr]);
+  const update = useCallback(
+    (updatedQuery: QueriesTriple) => {
+      const newQueries = queries.map((query: QueriesTriple) => {
+        const isSameQuery =
+          updatedQuery[0] === query[0] && updatedQuery[1] && query[1];
+        return isSameQuery ? updatedQuery : query;
+      });
+      setQueries(newQueries);
+    },
+    [queries]
+  );
 
-    isExisting
-      ? update(query, queries[keyAnd][keyOr])
-      : add(query, queries, keyAnd);
-    setQueries(queries);
+  const add = (newQuery: QueriesTriple, insertionIndex: number) => {
+    const newQueries = [
+      ...queries.slice(0, insertionIndex),
+      newQuery,
+      ...queries.slice(insertionIndex),
+    ];
+    setQueries(newQueries);
   };
 
   return (
-    <QueryContext.Provider value={{ queries, ops: { upsertQuery } }}>
+    <QueryContext.Provider value={{ queries, ops: { add, update } }}>
       {children}
     </QueryContext.Provider>
   );

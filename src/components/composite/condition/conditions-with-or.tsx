@@ -1,10 +1,9 @@
-import type { ORConditionsType } from "@/components/hooks/query/use-query";
+import type { QueriesType } from "@/components/hooks/query/use-query";
 import Condition from "./condition";
 import styled from "@emotion/styled";
 
 interface Props {
-  keyAnd: string;
-  orConditions: ORConditionsType;
+  orConditions: QueriesType;
 }
 
 const Container = styled.div({
@@ -22,11 +21,11 @@ const Container = styled.div({
   marginRight: "auto",
 });
 
-const ConditionsWithOr = ({ keyAnd, orConditions }: Props) => {
+const ConditionsWithOr = ({ orConditions }: Props) => {
   return (
     <Container>
-      {Object.keys(orConditions).map((orCondition, index) => (
-        <Condition key={orCondition} keyAnd={keyAnd} showOr={index !== 0} />
+      {orConditions.map((orCondition, index) => (
+        <Condition key={orCondition[1]} condition={orCondition} index={index} />
       ))}
     </Container>
   );
