@@ -1,4 +1,5 @@
 import type { Operators } from "@/utils/queries";
+import { generateId } from "@/utils/queries";
 import {
   useState,
   createContext,
@@ -18,9 +19,10 @@ export interface QueryType {
 }
 
 interface QueryContextOpsType {
-  add: (newQuery: QueriesTriple, insertionIndex: number) => void;
-  update: (updatedQuery: QueriesTriple) => void;
-  deleteQuery: (query: QueriesTriple) => void;
+  add(newQuery: QueriesTriple, insertionIndex: number): void;
+  update(updatedQuery: QueriesTriple): void;
+  deleteQuery(query: QueriesTriple): void;
+  addQuerySet(): void;
 }
 
 interface QueryContextType {
@@ -40,6 +42,11 @@ interface QueryContextType {
 export type QueriesTriple = [string, string, QueryType];
 export type QueriesType = Array<[string, string, QueryType]>;
 
+const defaultQueriesTriple: QueryType = {
+  condition: "",
+  operator: "",
+  value: "",
+};
 const mockQueries: QueriesType = [
   ["and_1", "or_1", { condition: "name", operator: "Contain", value: "Alm" }],
   ["and_1", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
@@ -51,7 +58,7 @@ const noop = () => {};
 
 const QueryContext = createContext<QueryContextType>({
   queries: [],
-  ops: { add: noop, update: noop, deleteQuery: noop },
+  ops: { add: noop, update: noop, deleteQuery: noop, addQuerySet: noop },
 });
 
 export const QueryContextProvider = ({ children }: Props) => {
@@ -92,9 +99,21 @@ export const QueryContextProvider = ({ children }: Props) => {
     [queries]
   );
 
+  const addQuerySet = useCallback(() => {
+    const andKey = generateId("and");
+    const orKey = generateId("or");
+    const newQuery: QueriesTriple = [
+      andKey,
+      orKey,
+      { ...defaultQueriesTriple },
+    ];
+    const newQueries = [...queries, newQuery];
+    setQueries(newQueries);
+  }, [queries]);
+
   return (
     <QueryContext.Provider
-      value={{ queries, ops: { add, update, deleteQuery } }}
+      value={{ queries, ops: { add, update, deleteQuery, addQuerySet } }}
     >
       {children}
     </QueryContext.Provider>

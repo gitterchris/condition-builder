@@ -72,6 +72,7 @@ const Condition = ({ condition, index }: Props) => {
           {showOr && <Or variant="body1" text="OR" />}
           <Select
             label="Left Condition"
+            initialValue={condition[2].condition}
             menuItems={leftConditions}
             onSelection={(selectedCondition) =>
               setLeftCondition(selectedCondition)
@@ -79,6 +80,7 @@ const Condition = ({ condition, index }: Props) => {
           />
           <Select
             label="Operator"
+            initialValue={condition[2].operator}
             menuItems={operators}
             onSelection={(selectedOperator) =>
               setOperator(selectedOperator as Operators)

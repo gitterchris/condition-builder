@@ -15,10 +15,6 @@ const Container = styled.div({
   display: "flex",
   flexDirection: "column",
   gap: "24px",
-  width: "100%",
-  maxWidth: "768px",
-  marginLeft: "auto",
-  marginRight: "auto",
 });
 
 const ConditionsWithOr = ({ orConditions }: Props) => {
