@@ -1,10 +1,17 @@
 "use client";
-import TextField from "@mui/material/TextField";
+
+import ConditionBuilder from "@/components/pages/condition-builder";
+import { DataContextProvider } from "@/components/hooks/data/use-data";
+import { QueryContextProvider } from "@/components/hooks/query/use-query";
 
 export default function Home() {
   return (
     <main>
-      <TextField id="outlined-basic" label="Url" variant="outlined" />
+      <DataContextProvider>
+        <QueryContextProvider>
+          <ConditionBuilder />
+        </QueryContextProvider>
+      </DataContextProvider>
     </main>
   );
 }
