@@ -20,6 +20,7 @@ export interface QueryType {
 interface QueryContextOpsType {
   add: (newQuery: QueriesTriple, insertionIndex: number) => void;
   update: (updatedQuery: QueriesTriple) => void;
+  deleteQuery: (query: QueriesTriple) => void;
 }
 
 interface QueryContextType {
@@ -50,7 +51,7 @@ const noop = () => {};
 
 const QueryContext = createContext<QueryContextType>({
   queries: [],
-  ops: { add: noop, update: noop },
+  ops: { add: noop, update: noop, deleteQuery: noop },
 });
 
 export const QueryContextProvider = ({ children }: Props) => {
@@ -58,7 +59,7 @@ export const QueryContextProvider = ({ children }: Props) => {
 
   const update = useCallback(
     (updatedQuery: QueriesTriple) => {
-      const newQueries = queries.map((query: QueriesTriple) => {
+      const newQueries = queries.map((query) => {
         const isSameQuery =
           updatedQuery[0] === query[0] && updatedQuery[1] && query[1];
         return isSameQuery ? updatedQuery : query;
@@ -68,17 +69,33 @@ export const QueryContextProvider = ({ children }: Props) => {
     [queries]
   );
 
-  const add = (newQuery: QueriesTriple, insertionIndex: number) => {
-    const newQueries = [
-      ...queries.slice(0, insertionIndex),
-      newQuery,
-      ...queries.slice(insertionIndex),
-    ];
-    setQueries(newQueries);
-  };
+  const add = useCallback(
+    (newQuery: QueriesTriple, insertionIndex: number) => {
+      const newQueries = [
+        ...queries.slice(0, insertionIndex),
+        newQuery,
+        ...queries.slice(insertionIndex),
+      ];
+      setQueries(newQueries);
+    },
+    [queries]
+  );
+
+  const deleteQuery = useCallback(
+    (query: QueriesTriple) => {
+      const newQueries = queries.filter((q) => {
+        const isQueryToBeDeleted = query[0] === q[0] && query[1] === q[1];
+        return !isQueryToBeDeleted;
+      });
+      setQueries(newQueries);
+    },
+    [queries]
+  );
 
   return (
-    <QueryContext.Provider value={{ queries, ops: { add, update } }}>
+    <QueryContext.Provider
+      value={{ queries, ops: { add, update, deleteQuery } }}
+    >
       {children}
     </QueryContext.Provider>
   );

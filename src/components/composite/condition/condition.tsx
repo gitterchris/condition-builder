@@ -43,19 +43,16 @@ const Or = styled(Text)({
   marginLeft: "16px",
 });
 
-const noop = () => {};
-
 const Condition = ({ condition, index }: Props) => {
   const { leftConditions } = useData();
   const [leftCondition, setLeftCondition] = useState<string>();
   const [operator, setOperator] = useState<Operators>();
   const [value, setValue] = useState<string>();
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
-  const showOr = index !== 0;
-
   const {
-    ops: { add, update },
+    ops: { add, update, deleteQuery },
   } = useQuery();
+  const showOr = index !== 0;
 
   useEffect(() => {
     const isCompleteCondition = leftCondition && operator && value;
@@ -105,7 +102,7 @@ const Condition = ({ condition, index }: Props) => {
             onMouseOver={() => setShowPlaceholder(true)}
             onMouseOut={() => setShowPlaceholder(false)}
           />
-          <Button.Icon type="delete" onClick={noop} />
+          <Button.Icon type="delete" onClick={() => deleteQuery(condition)} />
         </Ctas>
       </Container>
       {showPlaceholder && <RectangularPlaceholder />}
