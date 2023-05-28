@@ -47,13 +47,9 @@ const defaultQueriesTriple: QueryType = {
   operator: "",
   value: "",
 };
-const mockQueries: QueriesType = [
-  ["and_1", "or_1", { condition: "name", operator: "Contain", value: "Alm" }],
-  ["and_1", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
-  ["and_2", "or_1", { condition: "name", operator: "Contain", value: "Alm" }],
-  ["and_2", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
+const initialQuery: QueriesType = [
+  ["and_1", "or_1", { ...defaultQueriesTriple }],
 ];
-
 const noop = () => {};
 
 const QueryContext = createContext<QueryContextType>({
@@ -62,7 +58,7 @@ const QueryContext = createContext<QueryContextType>({
 });
 
 export const QueryContextProvider = ({ children }: Props) => {
-  const [queries, setQueries] = useState<QueriesType>([...mockQueries]);
+  const [queries, setQueries] = useState<QueriesType>([...initialQuery]);
 
   const update = useCallback(
     (updatedQuery: QueriesTriple) => {
