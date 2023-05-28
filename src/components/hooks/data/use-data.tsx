@@ -1,33 +1,62 @@
-import { createContext, ReactNode, useContext } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import { LeftConditionType } from "@/utils/queries";
+import { getMockData } from "./mock";
 
 interface Props {
   children: ReactNode;
 }
 
+// TODO: further refine this type.
+type DataType = Array<Record<string, string | object>>;
+
 interface DataContextType {
   leftConditions: LeftConditionType[];
+  setUrl(url: string): void;
 }
 
 const DataContext = createContext<DataContextType>({
   leftConditions: [],
+  setUrl: () => {},
 });
 
+const getLeftConditions = (data: DataType) => {
+  if (data?.length === 0) return [];
+  return Object.keys(data[0]).map((key) => ({
+    text: key,
+    value: key,
+  }));
+};
+
 export const DataContextProvider = ({ children }: Props) => {
-  // TODO: Hardcoding this for now.
-  // Value should come from the API call and should be filtered.
-  const leftConditions = [
-    {
-      text: "name",
-      value: "name",
-    },
-    {
-      text: "id",
-      value: "id",
-    },
-  ];
+  const [data, setData] = useState<DataType>([]);
+  const [url, setUrl] = useState<string>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMockData();
+        // const res = await fetch(url);
+        // const result = await res.json();
+        setData(data);
+      } catch (e) {
+        console.log(e);
+        throw e; // TODO
+      }
+    };
+
+    fetchData();
+  }, [url]);
+
+  const leftConditions = useMemo(() => getLeftConditions(data), [data]);
   return (
-    <DataContext.Provider value={{ leftConditions }}>
+    <DataContext.Provider value={{ leftConditions, setUrl }}>
       {children}
     </DataContext.Provider>
   );

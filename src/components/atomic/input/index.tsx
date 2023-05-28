@@ -1,13 +1,14 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, FocusEventHandler } from "react";
 import { TextField } from "@mui/material";
 
 interface Props {
   label: string;
   helperText?: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
-const TextInput = ({ label, helperText, onChange }: Props) => {
+const TextInput = ({ label, helperText, onChange, onBlur }: Props) => {
   return (
     <TextField
       size="small"
@@ -15,6 +16,7 @@ const TextInput = ({ label, helperText, onChange }: Props) => {
       label={label}
       helperText={helperText}
       onChange={onChange}
+      onBlur={onBlur}
     />
   );
 };
