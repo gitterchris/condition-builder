@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 interface Props {
   label: string;
   helperText?: string;
-  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 

@@ -1,4 +1,4 @@
-import type { Operators } from "@/utils/queries";
+import type { QueryType, QueriesType, QueriesTriple } from "@/utils/types";
 import { generateId } from "@/utils/queries";
 import {
   useState,
@@ -12,12 +12,6 @@ interface Props {
   children: ReactNode;
 }
 
-export interface QueryType {
-  condition: string;
-  operator: Operators;
-  value: string;
-}
-
 interface QueryContextOpsType {
   add(newQuery: QueriesTriple, insertionIndex: number): void;
   update(updatedQuery: QueriesTriple): void;
@@ -29,18 +23,6 @@ interface QueryContextType {
   queries: QueriesType;
   ops: QueryContextOpsType;
 }
-
-/*
-  Sample:
-  [
-    [ "and_1", "or_1", { condition: "name", operator: "Contain", value: "Alm" } ],
-    [ "and_1", "or_2", { condition: "name", operator: "Contain", value: "Iron" } ],
-    [ "and_2", "or_1", { condition: "name", operator: "Contain", value: "Alm" } ],
-    [ "and_2", "or_2", { condition: "name", operator: "Contain", value: "Iron" }],
-  ]
-*/
-export type QueriesTriple = [string, string, QueryType];
-export type QueriesType = Array<[string, string, QueryType]>;
 
 const defaultQueriesTriple: QueryType = {
   condition: "",

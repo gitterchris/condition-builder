@@ -6,24 +6,23 @@ import {
   useState,
   useMemo,
 } from "react";
-import { LeftConditionType } from "@/utils/queries";
+import { LeftConditionType, DataType } from "@/utils/types";
 import { getMockData } from "./mock";
 
 interface Props {
   children: ReactNode;
 }
 
-// TODO: further refine this type.
-type DataType = Array<Record<string, string | object>>;
-
 interface DataContextType {
   leftConditions: LeftConditionType[];
   setUrl(url: string): void;
+  data: DataType;
 }
 
 const DataContext = createContext<DataContextType>({
   leftConditions: [],
   setUrl: () => {},
+  data: [],
 });
 
 const getLeftConditions = (data: DataType) => {
@@ -56,7 +55,7 @@ export const DataContextProvider = ({ children }: Props) => {
 
   const leftConditions = useMemo(() => getLeftConditions(data), [data]);
   return (
-    <DataContext.Provider value={{ leftConditions, setUrl }}>
+    <DataContext.Provider value={{ leftConditions, setUrl, data }}>
       {children}
     </DataContext.Provider>
   );

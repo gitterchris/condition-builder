@@ -8,7 +8,7 @@ import * as Button from "@/components/atomic/button";
 import Text from "@/components/atomic/text";
 import useQuery, { QueriesTriple } from "@/components/hooks/query/use-query";
 import useData from "@/components/hooks/data/use-data";
-import type { Operators } from "@/utils/queries";
+import type { Operators } from "@/utils/types";
 import { operators, generateId } from "@/utils/queries";
 import RectangularPlaceholder from "@/components/atomic/placeholder";
 

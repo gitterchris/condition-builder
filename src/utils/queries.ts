@@ -1,18 +1,5 @@
+import type { QueriesType, Operators, OperatorType } from "./types";
 import { v4 as uuidv4 } from "uuid";
-
-export type Operators =
-  | "Equals"
-  | "Greater than"
-  | "Less than"
-  | "Contain"
-  | "Not Contain"
-  | "Regex"
-  | "";
-
-export interface OperatorType {
-  text: Operators;
-  value: Operators;
-}
 
 const ops: Array<Operators> = [
   "Equals",
@@ -27,11 +14,20 @@ export const operators: Array<OperatorType> = ops.map((o) => ({
   value: o,
 }));
 
-export interface LeftConditionType {
-  text: string;
-  value: string;
-}
-
 export const generateId = (type: "or" | "and") => {
   return `${type}_${uuidv4()}`;
+};
+
+// TODO: Add test here.
+export const groupQueries = (queries: QueriesType) => {
+  return queries.reduce((map, curr) => {
+    const key = curr[0];
+    if (!map.has(key)) {
+      return map.set(key, [curr]);
+    }
+
+    const value = map.get(key);
+    value.push(curr);
+    return map;
+  }, new Map());
 };

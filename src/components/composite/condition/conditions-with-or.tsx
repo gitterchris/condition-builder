@@ -1,4 +1,4 @@
-import type { QueriesType } from "@/components/hooks/query/use-query";
+import type { QueriesType } from "@/utils/types";
 import Condition from "./condition";
 import styled from "@emotion/styled";
 
