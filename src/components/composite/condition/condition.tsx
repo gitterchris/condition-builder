@@ -50,20 +50,23 @@ const Condition = ({ condition, index }: Props) => {
   const [value, setValue] = useState<string>();
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
   const {
+    queries,
     ops: { add, update, deleteQuery },
   } = useQuery();
   const showOr = index !== 0;
 
+  const keyAnd = condition[0];
+  const keyOr = condition[1];
+
   useEffect(() => {
     const isCompleteCondition = leftCondition && operator && value;
     if (isCompleteCondition) {
-      update([
-        condition[0],
-        condition[1],
-        { condition: leftCondition, operator, value },
-      ]);
+      update(
+        [keyAnd, keyOr, { condition: leftCondition, operator, value }],
+        queries
+      );
     }
-  }, [condition, leftCondition, operator, update, value]);
+  }, [leftCondition, operator, value, keyAnd, keyOr, update]);
 
   return (
     <>

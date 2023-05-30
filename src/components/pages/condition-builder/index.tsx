@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
-import Text from "@/components/atomic/text";
 import Filters from "@/components/composite/condition/conditions-with-and";
-import TextField from "@/components/atomic/input";
+import Result from "@/components/composite/results";
 import useData from "@/components/hooks/data/use-data";
+import TextField from "@/components/atomic/input";
+import Text from "@/components/atomic/text";
 
 const Container = styled.div({
   width: "100%",
@@ -30,6 +31,7 @@ const ConditionBuilder = () => {
         onBlur={(e) => setUrl(e.target.value)}
       />
       <Filters />
+      <Result />
     </Container>
   );
 };

@@ -14,7 +14,7 @@ interface Props {
 
 interface QueryContextOpsType {
   add(newQuery: QueriesTriple, insertionIndex: number): void;
-  update(updatedQuery: QueriesTriple): void;
+  update(updatedQuery: QueriesTriple, query: QueriesType): void;
   deleteQuery(query: QueriesTriple): void;
   addQuerySet(): void;
 }
@@ -43,7 +43,7 @@ export const QueryContextProvider = ({ children }: Props) => {
   const [queries, setQueries] = useState<QueriesType>([...initialQuery]);
 
   const update = useCallback(
-    (updatedQuery: QueriesTriple) => {
+    (updatedQuery: QueriesTriple, queries: QueriesType) => {
       const newQueries = queries.map((query) => {
         const isSameQuery =
           updatedQuery[0] === query[0] && updatedQuery[1] && query[1];
@@ -51,33 +51,27 @@ export const QueryContextProvider = ({ children }: Props) => {
       });
       setQueries(newQueries);
     },
-    [queries]
+    []
   );
 
-  const add = useCallback(
-    (newQuery: QueriesTriple, insertionIndex: number) => {
-      const newQueries = [
-        ...queries.slice(0, insertionIndex),
-        newQuery,
-        ...queries.slice(insertionIndex),
-      ];
-      setQueries(newQueries);
-    },
-    [queries]
-  );
+  const add = (newQuery: QueriesTriple, insertionIndex: number) => {
+    const newQueries = [
+      ...queries.slice(0, insertionIndex),
+      newQuery,
+      ...queries.slice(insertionIndex),
+    ];
+    setQueries(newQueries);
+  };
 
-  const deleteQuery = useCallback(
-    (query: QueriesTriple) => {
-      const newQueries = queries.filter((q) => {
-        const isQueryToBeDeleted = query[0] === q[0] && query[1] === q[1];
-        return !isQueryToBeDeleted;
-      });
-      setQueries(newQueries);
-    },
-    [queries]
-  );
+  const deleteQuery = (query: QueriesTriple) => {
+    const newQueries = queries.filter((q) => {
+      const isQueryToBeDeleted = query[0] === q[0] && query[1] === q[1];
+      return !isQueryToBeDeleted;
+    });
+    setQueries(newQueries);
+  };
 
-  const addQuerySet = useCallback(() => {
+  const addQuerySet = () => {
     const andKey = generateId("and");
     const orKey = generateId("or");
     const newQuery: QueriesTriple = [
@@ -87,7 +81,7 @@ export const QueryContextProvider = ({ children }: Props) => {
     ];
     const newQueries = [...queries, newQuery];
     setQueries(newQueries);
-  }, [queries]);
+  };
 
   return (
     <QueryContext.Provider

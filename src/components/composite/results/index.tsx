@@ -4,6 +4,7 @@ import type {
   DataTypes,
   QueryType,
   OperatorsWithoutEmpty,
+  Operators,
 } from "@/utils/types";
 import useData from "@/components/hooks/data/use-data";
 import useQuery from "@/components/hooks/query/use-query";
@@ -13,8 +14,15 @@ import { QueriesTriple } from "@/utils/types";
 import { opsMapping } from "./conditions";
 import orderBy from "lodash.orderby";
 
+const isValidQuery = (
+  condition: string,
+  operator: Operators,
+  value: string | number
+) => condition && operator && value;
+
 const test = (data: DataType, queriesTriple: QueriesTriple) => {
   const { condition, operator, value }: QueryType = queriesTriple[2];
+  if (!isValidQuery(condition, operator, value)) return false;
 
   const operation = opsMapping[operator as OperatorsWithoutEmpty];
   return operation(data, condition, value);
@@ -25,9 +33,9 @@ const filterResult = (data: DataTypes, queries: QueriesType) => {
   const groupedByAndQueries = groupQueries(queries);
 
   return data.filter((d) => {
-    const AndConditions = Object.values(groupedByAndQueries);
+    const AndConditions = groupedByAndQueries.values();
 
-    for (let orConditions of AndConditions) {
+    for (let orConditions of [...AndConditions]) {
       let isAllFalse = true;
       for (let condition of orConditions) {
         if (test(d, condition)) {
@@ -49,11 +57,15 @@ const Result = () => {
   const { data } = useData();
   const { queries } = useQuery();
 
-  const result = useMemo(() => filterResult(data, queries), [data, queries]);
+  const result = useMemo(() => {
+    console.log("FILTERING RESULT.....", data, queries);
+    return filterResult(data, queries);
+  }, [data, queries]);
   const sortedResult = useMemo(
     () => orderBy(result, sortBy, isSortedAsc),
     [result, sortBy, isSortedAsc]
   );
+  console.log("RENDERING RESULT...", result);
   return (
     <>
       <h1>Result here</h1>
