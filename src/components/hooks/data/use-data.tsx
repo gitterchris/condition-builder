@@ -6,7 +6,7 @@ import {
   useState,
   useMemo,
 } from "react";
-import { LeftConditionType, DataType } from "@/utils/types";
+import { LeftConditionType, DataTypes } from "@/utils/types";
 import { getMockData } from "./mock";
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 interface DataContextType {
   leftConditions: LeftConditionType[];
   setUrl(url: string): void;
-  data: DataType;
+  data: DataTypes;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -25,7 +25,7 @@ const DataContext = createContext<DataContextType>({
   data: [],
 });
 
-const getLeftConditions = (data: DataType) => {
+const getLeftConditions = (data: DataTypes) => {
   if (data?.length === 0) return [];
   return Object.keys(data[0]).map((key) => ({
     text: key,
@@ -34,7 +34,7 @@ const getLeftConditions = (data: DataType) => {
 };
 
 export const DataContextProvider = ({ children }: Props) => {
-  const [data, setData] = useState<DataType>([]);
+  const [data, setData] = useState<DataTypes>([]);
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {

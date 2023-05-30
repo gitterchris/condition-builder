@@ -1,45 +1,47 @@
+import { DataType, OpsMappingType } from "@/utils/types";
+
 export const isEqual = (
-  data: Record<string, string>,
+  data: DataType,
   condition: string,
+  // TODO: might want to check why types are failing if we have this string for some and number for others.
   value: string | number
 ) => data[condition] === value;
 
 export const isGreaterThan = (
-  data: Record<string, number>,
+  data: DataType,
   condition: string,
-  value: number
-) => data[condition] > value;
+  value: string | number
+) => typeof value === "number" && +data[condition] > value;
 
 export const isLessThan = (
-  data: Record<string, number>,
+  data: DataType,
   condition: string,
-  value: number
-) => data[condition] < value;
+  value: string | number
+) => typeof value === "number" && +data[condition] < value;
 
 export const contains = (
-  data: Record<string, string>,
+  data: DataType,
   condition: string,
-  value: string
-) => data[condition].includes(value);
+  value: string | number
+) => (data[condition] as string).includes(value as string);
 
 export const doesNotContain = (
-  data: Record<string, string>,
+  data: DataType,
   condition: string,
-  value: string
+  value: string | number
 ) => !contains(data, condition, value);
 
 export const match = (
-  data: Record<string, string>,
+  data: DataType,
   condition: string,
-  value: string
-) => data[condition].match(value);
+  value: string | number
+) => !!(data[condition] as string).match(value as string);
 
-export const opsMapping = {
+export const opsMapping: OpsMappingType = {
   Equals: isEqual,
   "Greater than": isGreaterThan,
   "Less than": isLessThan,
   Contain: contains,
   "Not Contain": doesNotContain,
   Regex: match,
-  "": () => {}, // TODO
 };

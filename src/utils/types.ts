@@ -16,7 +16,7 @@ export interface OperatorType {
 export interface QueryType {
   condition: string;
   operator: Operators;
-  value: string;
+  value: string | number;
 }
 
 /*
@@ -36,5 +36,14 @@ export interface LeftConditionType {
   value: string;
 }
 
-// TODO: further refine this type.
-export type DataType = Array<Record<string, string | number>>;
+export interface DataType {
+  [key: string]: string | number;
+}
+export type DataTypes = DataType[];
+export type OpFunctions = (
+  data: DataType,
+  condition: string,
+  value: string | number
+) => boolean;
+export type OperatorsWithoutEmpty = Exclude<Operators, "">;
+export type OpsMappingType = Record<OperatorsWithoutEmpty, OpFunctions>;

@@ -6,9 +6,9 @@ import Select from "@/components/atomic/select";
 import TextField from "@/components/atomic/input";
 import * as Button from "@/components/atomic/button";
 import Text from "@/components/atomic/text";
-import useQuery, { QueriesTriple } from "@/components/hooks/query/use-query";
+import useQuery from "@/components/hooks/query/use-query";
 import useData from "@/components/hooks/data/use-data";
-import type { Operators } from "@/utils/types";
+import type { Operators, QueriesTriple } from "@/utils/types";
 import { operators, generateId } from "@/utils/queries";
 import RectangularPlaceholder from "@/components/atomic/placeholder";
 

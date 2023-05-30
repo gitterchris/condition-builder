@@ -1,25 +1,27 @@
-import type { QueriesType, DataType, QueryType } from "@/utils/types";
+import type {
+  QueriesType,
+  DataType,
+  DataTypes,
+  QueryType,
+  OperatorsWithoutEmpty,
+} from "@/utils/types";
 import useData from "@/components/hooks/data/use-data";
 import useQuery from "@/components/hooks/query/use-query";
 import { groupQueries } from "@/utils/queries";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { QueriesTriple } from "@/utils/types";
 import { opsMapping } from "./conditions";
+import orderBy from "lodash.orderby";
 
-const test = (
-  data: Record<string, string> & Record<string, number>,
-  queriesTriple: QueriesTriple
-) => {
-  // TODO: Return true for now while I check the type error.
-  return true;
-  // const { condition, operator, value }: QueryType = queriesTriple[2];
+const test = (data: DataType, queriesTriple: QueriesTriple) => {
+  const { condition, operator, value }: QueryType = queriesTriple[2];
 
-  // const operation = opsMapping[operator];
-  // return operation(data, condition, value);
+  const operation = opsMapping[operator as OperatorsWithoutEmpty];
+  return operation(data, condition, value);
 };
 
 // TODO: Add test
-const filterResult = (data: DataType, queries: QueriesType) => {
+const filterResult = (data: DataTypes, queries: QueriesType) => {
   const groupedByAndQueries = groupQueries(queries);
 
   return data.filter((d) => {
@@ -42,16 +44,21 @@ const filterResult = (data: DataType, queries: QueriesType) => {
 };
 
 const Result = () => {
+  const [sortBy, setSortBy] = useState("");
+  const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true);
   const { data } = useData();
   const { queries } = useQuery();
 
   const result = useMemo(() => filterResult(data, queries), [data, queries]);
-
+  const sortedResult = useMemo(
+    () => orderBy(result, sortBy, isSortedAsc),
+    [result, sortBy, isSortedAsc]
+  );
   return (
     <>
       <h1>Result here</h1>
       <pre>
-        <code>{JSON.stringify(result, null, 2)}</code>
+        <code>{JSON.stringify(sortedResult, null, 2)}</code>
       </pre>
     </>
   );
