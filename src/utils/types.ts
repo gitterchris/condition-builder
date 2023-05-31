@@ -47,3 +47,7 @@ export type OpFunctions = (
 ) => boolean;
 export type OperatorsWithoutEmpty = Exclude<Operators, "">;
 export type OpsMappingType = Record<OperatorsWithoutEmpty, OpFunctions>;
+
+export interface KeyValuePair {
+  [key: string]: string | number | object | null;
+}

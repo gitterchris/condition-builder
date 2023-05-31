@@ -6,8 +6,9 @@ import {
   useState,
   useMemo,
 } from "react";
-import { LeftConditionType, DataTypes } from "@/utils/types";
+import { LeftConditionType, DataTypes, KeyValuePair } from "@/utils/types";
 import { getMockData } from "./mock";
+import { convertDates } from "@/utils/data";
 
 interface Props {
   children: ReactNode;
@@ -43,7 +44,8 @@ export const DataContextProvider = ({ children }: Props) => {
         const data = await getMockData();
         // const res = await fetch(url);
         // const result = await res.json();
-        setData(data);
+        // convert dates next
+        setData(data.map((d: KeyValuePair) => convertDates(d)));
       } catch (e) {
         console.log(e);
         throw e; // TODO

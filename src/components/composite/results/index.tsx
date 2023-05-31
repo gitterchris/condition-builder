@@ -12,8 +12,8 @@ import { groupQueries } from "@/utils/queries";
 import { useMemo, useState } from "react";
 import { QueriesTriple } from "@/utils/types";
 import { opsMapping } from "./conditions";
-import orderBy from "lodash.orderby";
 import Text from "@/components/atomic/text";
+import Table from "@/components/atomic/table";
 import Chips from "./chips";
 
 const isValidQuery = (
@@ -54,23 +54,22 @@ const filterResult = (data: DataTypes, queries: QueriesType) => {
 };
 
 const Result = () => {
-  const [sortBy, setSortBy] = useState("");
-  const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true);
   const { data } = useData();
   const { queries } = useQuery();
 
   const result = useMemo(() => filterResult(data, queries), [data, queries]);
-  const sortedResult = useMemo(
-    () => orderBy(result, sortBy, isSortedAsc),
-    [result, sortBy, isSortedAsc]
-  );
+  const columns =
+    (result?.[0] &&
+      Object.keys(result[0]).map((key) => ({
+        field: key,
+        headerName: key,
+      }))) ||
+    [];
   return (
     <>
       <Text variant="h6" text="Result" />
-      <Chips totalCount={data.length} filterCount={result.length} />
-      <pre>
-        <code>{JSON.stringify(sortedResult, null, 2)}</code>
-      </pre>
+      <Chips totalCount={data?.length} filterCount={result.length} />
+      <Table columns={columns} rows={result} />
     </>
   );
 };

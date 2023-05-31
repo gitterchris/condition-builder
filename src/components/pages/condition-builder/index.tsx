@@ -21,7 +21,7 @@ const headerStyles = {
 };
 
 const ConditionBuilder = () => {
-  const { setUrl } = useData();
+  const { setUrl, data } = useData();
   return (
     <Container>
       <Text variant="h1" text="Condition Builder" sx={headerStyles} />
@@ -31,7 +31,7 @@ const ConditionBuilder = () => {
         onBlur={(e) => setUrl(e.target.value)}
       />
       <Filters />
-      <Result />
+      {data?.length > 0 && <Result />}
     </Container>
   );
 };
