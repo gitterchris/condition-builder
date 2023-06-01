@@ -39,3 +39,11 @@ export const InputWithHelperText: Story = {
       "Insert data url. Returning data MUST be an array json with each element is key/value pair.",
   },
 };
+
+export const InputWithError: Story = {
+  args: {
+    error: true,
+    label: "Url",
+    helperText: "Must be numeric for Greater than or Less than operator.",
+  },
+};

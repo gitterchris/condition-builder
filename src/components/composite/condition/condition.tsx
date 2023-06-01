@@ -43,8 +43,20 @@ const Or = styled(Text)({
   marginLeft: "16px",
 });
 
+const isValid = (
+  operator: Operators | undefined,
+  value: string | undefined
+) => {
+  if (operator === "Greater than" || operator === "Less than") {
+    return !!value && !isNaN(+value);
+  }
+  return true;
+};
+
 const Condition = ({ condition, index }: Props) => {
   const { leftConditions } = useData();
+  const [valueValidForOperator, setValueValidForOperator] =
+    useState<boolean>(true);
   const [leftCondition, setLeftCondition] = useState<string>();
   const [operator, setOperator] = useState<Operators>();
   const [value, setValue] = useState<string>();
@@ -60,13 +72,24 @@ const Condition = ({ condition, index }: Props) => {
 
   useEffect(() => {
     const isCompleteCondition = leftCondition && operator && value;
-    if (isCompleteCondition) {
+    const isValueValidForTheOperator = isValid(operator, value);
+    if (isCompleteCondition && isValueValidForTheOperator) {
       update(
         [keyAnd, keyOr, { condition: leftCondition, operator, value }],
         queries
       );
     }
-  }, [leftCondition, operator, value, keyAnd, keyOr, update]);
+
+    setValueValidForOperator(isValueValidForTheOperator);
+  }, [
+    leftCondition,
+    operator,
+    value,
+    keyAnd,
+    keyOr,
+    update,
+    setValueValidForOperator,
+  ]);
 
   return (
     <>
@@ -89,7 +112,16 @@ const Condition = ({ condition, index }: Props) => {
               setOperator(selectedOperator as Operators)
             }
           />
-          <TextField label="Value" onChange={(e) => setValue(e.target.value)} />
+          <TextField
+            label="Value"
+            onChange={(e) => setValue(e.target.value)}
+            error={!valueValidForOperator}
+            helperText={
+              !valueValidForOperator
+                ? "Must be numeric for Greater than or Less than operator."
+                : ""
+            }
+          />
         </ConditionsSection>
         <Ctas>
           <Button.Icon
