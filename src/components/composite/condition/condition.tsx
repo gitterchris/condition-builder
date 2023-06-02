@@ -53,6 +53,9 @@ const isValid = (
   return true;
 };
 
+/**
+ * Condition represents the single line of query condition
+ */
 const Condition = ({ condition, index }: Props) => {
   const { leftConditions } = useData();
   const [valueValidForOperator, setValueValidForOperator] =

@@ -17,6 +17,9 @@ const Container = styled.div({
   gap: "24px",
 });
 
+/**
+ * ConditionsWithOr represents the list of "OR" conditions in one "AND" box
+ */
 const ConditionsWithOr = ({ orConditions }: Props) => {
   return (
     <Container>

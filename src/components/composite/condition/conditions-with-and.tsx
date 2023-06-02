@@ -14,6 +14,9 @@ const Container = styled.div({
   marginRight: "auto",
 });
 
+/**
+ * ConditionsWithAnd represents the list of "AND" boxes.
+ */
 const ConditionsWithAnd = () => {
   const {
     queries,
