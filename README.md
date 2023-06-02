@@ -20,6 +20,14 @@ npm run storybook
 
 Open [http://localhost:6006](http://localhost:6006) to see the components.
 
+Run tests with coverage:
+
+```bash
+npx jest --coverage
+```
+
+![tests](./demos/tests.png)
+
 ## Assumptions
 
 In real life, I may have asked the following questions before jumping in.
