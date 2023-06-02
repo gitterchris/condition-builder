@@ -1,6 +1,8 @@
 import { convertDates } from "./data";
+import { groupQueries } from "./queries";
+import { QueriesType } from "./types";
 
-describe("utils/data", () => {
+describe("convertDates", () => {
   it("converts all date string in an object", () => {
     const testObject = {
       name: "Limerick",
@@ -28,5 +30,67 @@ describe("utils/data", () => {
     };
 
     expect(convertDates(testObject)).toEqual(expectedObject);
+  });
+});
+
+describe("groupQueries", () => {
+  it("groups queries into keys", () => {
+    const queries: QueriesType = [
+      [
+        "and_1",
+        "or_1",
+        { condition: "name", operator: "Contain", value: "Alm" },
+      ],
+      [
+        "and_1",
+        "or_2",
+        { condition: "name", operator: "Contain", value: "Iron" },
+      ],
+      [
+        "and_2",
+        "or_1",
+        { condition: "name", operator: "Contain", value: "Alm" },
+      ],
+      [
+        "and_2",
+        "or_2",
+        { condition: "name", operator: "Contain", value: "Iron" },
+      ],
+    ];
+
+    const map = groupQueries(queries);
+
+    expect([...map]).toEqual([
+      [
+        "and_1",
+        [
+          [
+            "and_1",
+            "or_1",
+            { condition: "name", operator: "Contain", value: "Alm" },
+          ],
+          [
+            "and_1",
+            "or_2",
+            { condition: "name", operator: "Contain", value: "Iron" },
+          ],
+        ],
+      ],
+      [
+        "and_2",
+        [
+          [
+            "and_2",
+            "or_1",
+            { condition: "name", operator: "Contain", value: "Alm" },
+          ],
+          [
+            "and_2",
+            "or_2",
+            { condition: "name", operator: "Contain", value: "Iron" },
+          ],
+        ],
+      ],
+    ]);
   });
 });

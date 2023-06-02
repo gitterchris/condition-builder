@@ -30,8 +30,7 @@ const test = (data: DataType, queriesTriple: QueriesTriple) => {
   return operation(data, condition, value);
 };
 
-// TODO: Add test
-const filterResult = (data: DataTypes, queries: QueriesType) => {
+export const filterResult = (data: DataTypes, queries: QueriesType) => {
   const groupedByAndQueries = groupQueries(queries);
 
   return data.filter((d) => {

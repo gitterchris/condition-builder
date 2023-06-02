@@ -41,11 +41,9 @@ export const DataContextProvider = ({ children }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getMockData();
-        // const res = await fetch(url);
-        // const result = await res.json();
-        // convert dates next
-        setData(data.map((d: KeyValuePair) => convertDates(d)));
+        const res = await fetch(url);
+        const data = await res.json();
+        setData(data?.map((d: KeyValuePair) => convertDates(d)));
       } catch (e) {
         console.log(e);
         throw e; // TODO

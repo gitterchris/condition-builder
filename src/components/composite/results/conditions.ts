@@ -11,13 +11,13 @@ export const isGreaterThan = (
   data: DataType,
   condition: string,
   value: string | number
-) => typeof value === "number" && +data[condition] > value;
+) => +data[condition] > +value;
 
 export const isLessThan = (
   data: DataType,
   condition: string,
   value: string | number
-) => typeof value === "number" && +data[condition] < value;
+) => +data[condition] < +value;
 
 export const contains = (
   data: DataType,

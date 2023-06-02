@@ -18,7 +18,6 @@ export const generateId = (type: "or" | "and") => {
   return `${type}_${uuidv4()}`;
 };
 
-// TODO: Add test here.
 export const groupQueries = (queries: QueriesType) => {
   return queries.reduce((map, curr) => {
     const key = curr[0];

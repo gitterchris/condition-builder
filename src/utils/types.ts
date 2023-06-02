@@ -37,7 +37,7 @@ export interface LeftConditionType {
 }
 
 export interface DataType {
-  [key: string]: string | number;
+  [key: string]: any;
 }
 export type DataTypes = DataType[];
 export type OpFunctions = (
