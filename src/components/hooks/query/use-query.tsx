@@ -21,7 +21,7 @@ interface QueryContextOpsType {
   add(newQuery: QueriesTriple, insertionIndex: number): void;
   update(updatedQuery: QueriesTriple, query: QueriesType): void;
   deleteQuery(query: QueriesTriple): void;
-  addQuerySet(condition: string, operator: Operators): void;
+  addQuerySet(): void;
 }
 
 interface QueryContextType {

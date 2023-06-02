@@ -27,8 +27,9 @@ In the interest of time and since we do not have a physical person to ask, I mad
 ## Improvements
 
 - Responsive design - just needs mobile spec. Ideally, it will be easier if we use a mobile first approach during development.
-- During development, we can add feature flag so that we can commit our half baked features anytime.
+- We can also add a feature flag so that we can commit our half baked features anytime.
 - Cypress tests for end-to-end test. Right now, I am mocking API calls with msw. With Cypress, you can test different data with different API calls.
+- We can use React Query to further improve our caching and state management.
 
 ## Demo
 

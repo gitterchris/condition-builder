@@ -63,7 +63,6 @@ export const filterResult = (data: DataTypes, queries: QueriesType) => {
       // One false in an AND will make the statement false;
       if (isAllFalse) return false;
     }
-
     return true;
   });
 };
