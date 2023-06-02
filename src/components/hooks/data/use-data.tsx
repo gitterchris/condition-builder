@@ -50,7 +50,7 @@ export const DataContextProvider = ({ children }: Props) => {
       }
     };
 
-    fetchData();
+    url && fetchData();
   }, [url]);
 
   const leftConditions = useMemo(() => getLeftConditions(data), [data]);

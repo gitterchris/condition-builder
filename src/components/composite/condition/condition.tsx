@@ -97,6 +97,7 @@ const Condition = ({ condition, index }: Props) => {
         <ConditionsSection>
           {showOr && <Or variant="body1" text="OR" />}
           <Select
+            id={`left-condition-${index}`}
             label="Left Condition"
             initialValue={condition[2].condition}
             menuItems={leftConditions}
@@ -105,6 +106,7 @@ const Condition = ({ condition, index }: Props) => {
             }
           />
           <Select
+            id={`operator-${index}`}
             label="Operator"
             initialValue={condition[2].operator}
             menuItems={operators}
@@ -113,6 +115,7 @@ const Condition = ({ condition, index }: Props) => {
             }
           />
           <TextField
+            id={`value-${index}`}
             label="Value"
             onChange={(e) => setValue(e.target.value)}
             error={!valueValidForOperator}

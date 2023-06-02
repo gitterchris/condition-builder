@@ -21,7 +21,11 @@ const ConditionsWithOr = ({ orConditions }: Props) => {
   return (
     <Container>
       {orConditions.map((orCondition, index) => (
-        <Condition key={orCondition[1]} condition={orCondition} index={index} />
+        <Condition
+          key={`${orCondition[0]}-${orCondition[1]}`}
+          condition={orCondition}
+          index={index}
+        />
       ))}
     </Container>
   );

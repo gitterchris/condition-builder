@@ -4,7 +4,7 @@ import { Add as AddIcon } from "@mui/icons-material";
 
 interface Props {
   label: string;
-  icon?: "add";
+  icon: "add";
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -17,7 +17,7 @@ const OutlinedButton = ({ label, icon, onClick }: Props) => {
     <Button
       variant="outlined"
       size="small"
-      startIcon={!!icon ? supportedIcons[icon] : null}
+      startIcon={supportedIcons[icon]}
       onClick={onClick}
     >
       {label}

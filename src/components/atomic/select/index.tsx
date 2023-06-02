@@ -8,18 +8,14 @@ interface MenuItem {
 }
 
 interface Props {
-  initialValue?: string;
+  initialValue: string;
+  id?: string;
   label: string;
   menuItems: Array<MenuItem>;
   onSelection: (a: string) => void;
 }
 
-const Select = ({
-  initialValue = "",
-  label,
-  menuItems,
-  onSelection,
-}: Props) => {
+const Select = ({ initialValue, id, label, menuItems, onSelection }: Props) => {
   const [value, setValue] = useState<string>(initialValue);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -35,6 +31,7 @@ const Select = ({
         labelId={label}
         value={value}
         label={label}
+        inputProps={{ "data-testid": id }}
         onChange={handleChange}
       >
         <MenuItem value="">

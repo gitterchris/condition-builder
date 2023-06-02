@@ -3,6 +3,7 @@ import { TextField } from "@mui/material";
 
 interface Props {
   label: string;
+  id?: string;
   error?: boolean;
   helperText?: string;
   onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
@@ -11,6 +12,7 @@ interface Props {
 
 const TextInput = ({
   label,
+  id,
   error = false,
   helperText,
   onChange,
@@ -23,6 +25,7 @@ const TextInput = ({
       variant="outlined"
       label={label}
       helperText={helperText}
+      inputProps={{ "data-testid": id }}
       onChange={onChange}
       onBlur={onBlur}
     />
