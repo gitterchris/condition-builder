@@ -12,6 +12,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Run storybook:
+
+```bash
+npm run storybook
+```
+
+Open [http://localhost:6006](http://localhost:6006) to see the components.
+
 ## Assumptions
 
 In real life, I may have asked the following questions before jumping in.
@@ -33,7 +41,9 @@ In the interest of time and since we do not have a physical person to ask, I mad
 
 ## Demo
 
-I implemented all the features, including the two bonus points.
+I implemented all the features, including the two bonus points. I used component driven development, wherein I started with the smallest components first (`./src/components/atomic/*`) then slowly building from the bottom up (`./src/components/composite` -> `./src/components/pages`).
+
+I decided to wrap MUI with my own component library to make it cleaner. It will also make it easier for us to update our own components and have more control (i.e. we decided to use Semantic UI instead of MUI, or remove dependency to MUI for some components, etc).
 
 ![demo1](./demos/demo1.gif)
 ![demo2](./demos/demo2.gif)
