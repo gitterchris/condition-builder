@@ -22,24 +22,39 @@ const isValidQuery = (
   value: string | number
 ) => condition && operator && value;
 
-const test = (data: DataType, queriesTriple: QueriesTriple) => {
+const test = (
+  data: DataType,
+  queriesTriple: QueriesTriple,
+  override: boolean
+) => {
   const { condition, operator, value }: QueryType = queriesTriple[2];
-  if (!isValidQuery(condition, operator, value)) return true;
+  if (!isValidQuery(condition, operator, value)) return override; // false;
 
   const operation = opsMapping[operator as OperatorsWithoutEmpty];
   return operation(data, condition, value);
 };
 
 export const filterResult = (data: DataTypes, queries: QueriesType) => {
+  const initialQuery =
+    queries.length === 1 &&
+    queries[0][2].condition === "" &&
+    queries[0][2].operator === "" &&
+    queries[0][2].value === "";
+  if (initialQuery) return data;
+
   const groupedByAndQueries = groupQueries(queries);
 
   return data.filter((d) => {
-    const AndConditions = groupedByAndQueries.values();
+    const andConditions = groupedByAndQueries.values();
+    const andConditionsArray = [...andConditions];
 
-    for (let orConditions of [...AndConditions]) {
+    for (let i = 0; i < andConditionsArray.length; i++) {
+      let orConditions = andConditionsArray[i];
       let isAllFalse = true;
-      for (let condition of orConditions) {
-        if (test(d, condition)) {
+
+      for (let j = 0; j < orConditions.length; j++) {
+        let condition = orConditions[j];
+        if (test(d, condition, j === 0)) {
           isAllFalse = false;
           // No need to test the rest of the conditions since one true in an OR is true
           break;
@@ -48,6 +63,7 @@ export const filterResult = (data: DataTypes, queries: QueriesType) => {
       // One false in an AND will make the statement false;
       if (isAllFalse) return false;
     }
+
     return true;
   });
 };

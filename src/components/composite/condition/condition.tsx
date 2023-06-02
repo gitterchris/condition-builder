@@ -57,9 +57,11 @@ const Condition = ({ condition, index }: Props) => {
   const { leftConditions } = useData();
   const [valueValidForOperator, setValueValidForOperator] =
     useState<boolean>(true);
-  const [leftCondition, setLeftCondition] = useState<string>();
-  const [operator, setOperator] = useState<Operators>();
-  const [value, setValue] = useState<string>();
+  const [leftCondition, setLeftCondition] = useState<string>(
+    condition[2].condition
+  );
+  const [operator, setOperator] = useState<Operators>(condition[2].operator);
+  const [value, setValue] = useState<string>(condition[2].value);
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
   const {
     queries,
@@ -134,7 +136,10 @@ const Condition = ({ condition, index }: Props) => {
                 [
                   condition[0],
                   generateId("or"),
-                  { condition: "", operator: "", value: "" },
+                  {
+                    ...condition[2],
+                    value: "",
+                  },
                 ],
                 index + 1
               );

@@ -1,4 +1,9 @@
-import type { QueryType, QueriesType, QueriesTriple } from "@/utils/types";
+import type {
+  QueryType,
+  QueriesType,
+  QueriesTriple,
+  Operators,
+} from "@/utils/types";
 import { generateId } from "@/utils/queries";
 import {
   useState,
@@ -16,7 +21,7 @@ interface QueryContextOpsType {
   add(newQuery: QueriesTriple, insertionIndex: number): void;
   update(updatedQuery: QueriesTriple, query: QueriesType): void;
   deleteQuery(query: QueriesTriple): void;
-  addQuerySet(): void;
+  addQuerySet(condition: string, operator: Operators): void;
 }
 
 interface QueryContextType {
@@ -46,7 +51,7 @@ export const QueryContextProvider = ({ children }: Props) => {
     (updatedQuery: QueriesTriple, queries: QueriesType) => {
       const newQueries = queries.map((query) => {
         const isSameQuery =
-          updatedQuery[0] === query[0] && updatedQuery[1] && query[1];
+          updatedQuery[0] === query[0] && updatedQuery[1] === query[1];
         return isSameQuery ? updatedQuery : query;
       });
       setQueries(newQueries);
@@ -74,11 +79,15 @@ export const QueryContextProvider = ({ children }: Props) => {
   const addQuerySet = () => {
     const andKey = generateId("and");
     const orKey = generateId("or");
+    const lastQuery = queries[queries.length - 1];
+    const lastCondition = lastQuery[2].condition;
+    const lastOperator = lastQuery[2].operator;
     const newQuery: QueriesTriple = [
       andKey,
       orKey,
-      { ...defaultQueriesTriple },
+      { condition: lastCondition, operator: lastOperator, value: "" },
     ];
+
     const newQueries = [...queries, newQuery];
     setQueries(newQueries);
   };

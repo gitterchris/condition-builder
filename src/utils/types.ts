@@ -16,7 +16,7 @@ export interface OperatorType {
 export interface QueryType {
   condition: string;
   operator: Operators;
-  value: string | number;
+  value: string;
 }
 
 /*
