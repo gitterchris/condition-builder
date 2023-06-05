@@ -51,7 +51,29 @@ In the interest of time and since we do not have a physical person to ask, I mad
 
 I implemented all the features, including the two bonus points. I used component driven development, wherein I started with the smallest components first (`./src/components/atomic/*`) then slowly building from the bottom up (`./src/components/composite` -> `./src/components/pages`).
 
-I decided to wrap MUI with my own component library to make it cleaner. It will also make it easier for us to update our own components and have more control (i.e. we decided to use Semantic UI instead of MUI, or remove dependency to MUI for some components, etc).
+I decided to wrap MUI with my own component library to make it cleaner. It will also make it easier for us to update our own components and have more control (e.g. we decided to use Semantic UI instead of MUI, or remove dependency to MUI for some components, etc).
+
+I used NextJS to get webpack and all other dev setup for free. I used the context API + custom hooks pattern to make it easier to share data between components in the tree, thus avoiding prop drilling, resulting to a much cleaner code. To briefly explain the code flow, here is the component tree structure:
+
+1. src/app/page.tsx (Root)
+
+- NextJS page.
+- Wraps the main ConditionBuiler component inside the two context providers. DataContextProvider contains the data returned by the URL and all other operations for these data that can be shared by child components. Similarly, QueryContextProvider contains the current queries and all other functions needed to update the queries.
+
+2. src/components/pages/condition-builder/index.tsx
+
+- Contains the actual page.
+- Has the header, URL field, Filters and Result as children. Filters and Result are the two main child components.
+
+3. src/components/composite/condition/condition-with-or.tsx (Filters component)
+
+- This is the parent of all condition components in the folder. This represents the entire filter section of the page.
+- The conditions-with-or.tsx represents each box in the filter section, separated by OR statements.
+- The conditions.tsx represents a single condition, one left condition, operator and value set.
+
+4. src/components/composite/results/index.tsx (Result component)
+
+- Contains the result portion of the page.
 
 ![demo1](./demos/demo1.gif)
 ![demo2](./demos/demo2.gif)
